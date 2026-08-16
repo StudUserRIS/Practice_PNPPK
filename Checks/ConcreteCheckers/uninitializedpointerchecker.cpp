@@ -7,7 +7,7 @@ QList<CheckResult> UninitializedPointerChecker::check(QString fileName)
     QByteArray sourceCode = CheckHelper::getSourceCode(fileName);
     QList<CheckResult> results;
     
-    // Ищем указатели, заканчивающиеся точкой с запятой (без инициализации)
+    // Find pointers ending with a semicolon (without initialization)
     QRegularExpression regex("\\b[A-Za-z_][A-Za-z0-9_:]*(?:\\s*<[^>]*>)?\\s*\\*\\s*[A-Za-z_][A-Za-z0-9_]*\\s*;");
     QRegularExpressionMatchIterator matches = regex.globalMatch(sourceCode);
     

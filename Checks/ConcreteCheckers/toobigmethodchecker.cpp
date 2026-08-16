@@ -182,14 +182,14 @@ bool TooBigMethodChecker::checkSpesialSpace(char current, char next, char befor,
 QString TooBigMethodChecker::findName(QByteArray byteArray)
 {
     QString str = QString::fromUtf8(byteArray);
-    // Ищем паттерн имени метода перед скобкой. Захватываем опционально класс::метод
+    // Find the method name pattern before the parenthesis. Optionally capture class::method
     QRegularExpression regex(R"((?:[\w\*&<>:]+\s+)?(\w+(?:::\w+)?)\s*\()");
     QRegularExpressionMatch match = regex.match(str);
     
     if (match.hasMatch()) 
     {
         QString name = match.captured(1);
-        // Отсекаем стандартные конструкции языка
+        // Filter out standard language constructs
         if (name == "if" || name == "while" || name == "for" || name == "switch" || name == "catch") 
         {
             return "not method";
@@ -199,51 +199,3 @@ QString TooBigMethodChecker::findName(QByteArray byteArray)
     return "not method";
 }
 
-QString TooBigMethodChecker::checkingNameForTrue(int& i, QByteArray byteArray, bool& flag)
-{
-    int startPos = 0;
-    int endPos = i + 1;
-    QString methodName = "name not found";
-
-    for (int j = i; j >= 0; j--)
-    {
-        char current = byteArray.at(j);
-        char befor = (j - 1 >= 0) ? byteArray.at(j - 1) : '\0';
-
-        if (isspace(current))
-        {
-            startPos = j + 1;
-            flag = false;
-            continue;
-        }
-        else if ((current == ':' && befor != ':') || current == ',')
-        {
-            flag = false;
-            i = j;
-            j = -1;
-        }
-        else if ((current != ':' || current != ',') && !flag)
-        {
-            startPos = j + 1;
-            methodName = QString::fromUtf8(byteArray.mid(startPos, endPos - startPos));
-        }
-        else if (current == ':' && befor == ':')
-        {
-            startPos = j + 1;
-            methodName = QString::fromUtf8(byteArray.mid(startPos, endPos - startPos));
-            return methodName;
-        }
-        else if (flag)
-        {
-            continue;
-        }
-        else
-        { //Если найденное имя оказалось не именем, продолжаем перебор
-            startPos = j + 1;
-            methodName = QString::fromUtf8(byteArray.mid(startPos, endPos - startPos));
-            return methodName;
-        }
-    }
-
-    return methodName;
-}

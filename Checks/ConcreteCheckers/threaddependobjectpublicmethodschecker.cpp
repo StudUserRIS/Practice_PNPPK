@@ -12,7 +12,7 @@ QList<CheckResult> ThreadDependObjectPublicMethodsChecker::check(QString fileNam
     QByteArray sourceCode = CheckHelper::getSourceCode(fileName);
     QList<CheckResult> results;
     
-    // Проверяем, наследуется ли класс от ThreadDependObject
+    // Check if the class inherits from ThreadDependObject
     if (!sourceCode.contains("public ThreadDependObject")) 
     {
         return results;
@@ -22,14 +22,26 @@ QList<CheckResult> ThreadDependObjectPublicMethodsChecker::check(QString fileNam
     while (publicPos != -1)
     {
         int nextSectionPos = sourceCode.indexOf("protected:", publicPos + 7);
-        if (nextSectionPos == -1) nextSectionPos = sourceCode.indexOf("private:", publicPos + 7);
-        if (nextSectionPos == -1) nextSectionPos = sourceCode.indexOf("signals:", publicPos + 7);
-        if (nextSectionPos == -1) nextSectionPos = sourceCode.indexOf("slots:", publicPos + 7);
-        if (nextSectionPos == -1) nextSectionPos = sourceCode.size();
+        if (nextSectionPos == -1)
+        {
+            nextSectionPos = sourceCode.indexOf("private:", publicPos + 7);
+        }
+        if (nextSectionPos == -1)
+        {
+            nextSectionPos = sourceCode.indexOf("signals:", publicPos + 7);
+        }
+        if (nextSectionPos == -1)
+        {
+            nextSectionPos = sourceCode.indexOf("slots:", publicPos + 7);
+        }
+        if (nextSectionPos == -1)
+        {
+            nextSectionPos = sourceCode.size();
+        }
 
         QByteArray publicSection = sourceCode.mid(publicPos, nextSectionPos - publicPos);
         
-        // Ищем любую сигнатуру метода, не являющуюся конструктором/деструктором (наличие возвращаемого типа)
+        // Find any method signature that is not a constructor/destructor (presence of return type)
         QRegularExpression methodRegex("\\b([A-Za-z_][A-Za-z0-9_:]*)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*\\(");
         QRegularExpressionMatchIterator matches = methodRegex.globalMatch(publicSection);
         
@@ -38,7 +50,7 @@ QList<CheckResult> ThreadDependObjectPublicMethodsChecker::check(QString fileNam
             QRegularExpressionMatch match = matches.next();
             QString methodName = match.captured(2);
             
-            // Если это не макрос и не служебное слово
+            // If it is not a macro or a reserved word
             if (methodName != "override" && methodName != "final") 
             {
                 int line = CheckHelper::getLineNumberOfText(sourceCode, match.captured());

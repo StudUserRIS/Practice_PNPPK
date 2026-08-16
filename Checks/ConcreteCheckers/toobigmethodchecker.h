@@ -19,7 +19,6 @@ public:
     QList<TooBigMethodChecker::MethodInfo> findMethods(const QByteArray& code);
     bool checkSpesialSpace(char current, char next, char befor, char befor2);
     QString findName(QByteArray byteArray);
-    QString checkingNameForTrue(int& i, QByteArray byteArray, bool& flag);
 
     bool inString = false;      // ("...")
     bool inChar = false;        // ('...')

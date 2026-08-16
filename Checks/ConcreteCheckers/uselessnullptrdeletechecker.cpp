@@ -4,13 +4,16 @@
 
 QList<CheckResult> UselessNullptrDeleteChecker::check(QString fileName)
 {
-    if (!fileName.endsWith(".cpp")) return {};
+    if (!fileName.endsWith(".cpp"))
+    {
+        return {};
+    }
     
     QByteArray sourceCode = CheckHelper::getSourceCode(fileName);
     QList<CheckResult> results;
     
-    // Ищем if(ptr) delete ptr; или if(ptr != nullptr) delete ptr;
-    QRegularExpression regex("if\\s*\\(\\s*([A-Za-z0-9_]+)\\s*(?:!=\\s*nullptr|!=\\s*0)?\\s*\\)\\s*\\{?\\s*delete\\s+\\1\\s*;");
+    // Find if(ptr) delete ptr; or if(ptr != nullptr) delete ptr;
+    QRegularExpression regex("if\\s*\\(\\s*([A-Za-z0-9_]+)\\s*(?:!=\\s*(?:nullptr|NULL|0))?\\s*\\)\\s*\\{?\\s*delete\\s*(?:\\[\\s*\\])?\\s+\\1\\s*;");
     QRegularExpressionMatchIterator matches = regex.globalMatch(sourceCode);
     
     while (matches.hasNext())

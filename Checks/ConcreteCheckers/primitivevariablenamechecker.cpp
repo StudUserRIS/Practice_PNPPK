@@ -29,7 +29,7 @@ void PrimitiveVariableNameChecker::checkLocalVariables(const QByteArray& sourceC
         QRegularExpressionMatch match = matches.next();
         QString varName = match.captured(2);
 
-        // Исключения для стандартных переменных и счетчиков
+        // Exceptions for standard variables and counters
         if (varName == "ui" || varName == "i" || varName == "j" || varName == "k")
         {
             continue;
@@ -88,7 +88,7 @@ void PrimitiveVariableNameChecker::checkClassFields(const QByteArray& sourceCode
             QString typePart = match.captured(1);
             QString varName = match.captured(2);
 
-            // Исключение для переменной ui (игнорируем все проверки префиксов и длины)
+            // Exception for the ui variable (ignore all prefix and length checks)
             if (varName == "ui")
             {
                 continue;
