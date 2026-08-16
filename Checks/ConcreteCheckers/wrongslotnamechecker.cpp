@@ -56,7 +56,7 @@ QStringList WrongSlotNameChecker::findQtSlots(const QByteArray& code)
     // Функция для обработки найденных слотов
     QStringList slotsDefinitions;
     auto processSlots = [&](const QString& slotSection) {
-        QStringList slotsText = slotSection.split(';', QString::SplitBehavior::SkipEmptyParts);
+        QStringList slotsText = slotSection.split(';', Qt::SkipEmptyParts);
         for (const QString& slot : slotsText)
         {
             QString trimmedSlot = slot.trimmed();

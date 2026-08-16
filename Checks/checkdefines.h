@@ -22,6 +22,12 @@ enum class CheckType
     VeryLongMethod,                    //Сделано
     OldStyleConnections,               //Сделано
     PublicState,                       //Сделано
+    UninitializedPointer,              //
+    UselessNullptrDelete,              //
+    QWaitConditionUsage,               //
+    QtConcurrentUsage,                 //
+    DirectConnectionUsage,             //
+    ThreadDependObjectPublicMethods    //
 };
 
 const QMap<CheckType, QString> kCheckList = {
@@ -43,5 +49,11 @@ const QMap<CheckType, QString> kCheckList = {
     {CheckType::OldStyleConnections, "Старый стиль конектов"},
     {CheckType::SignalsNaming, "Именование сигналов"},
     {CheckType::PublicState, "Публичные поля класса"},
+    {CheckType::UninitializedPointer, "Неинициализированный указатель"},
+    {CheckType::UselessNullptrDelete, "Бесполезная проверка на nullptr перед delete"},
+    {CheckType::QWaitConditionUsage, "Использование QWaitCondition"},
+    {CheckType::QtConcurrentUsage, "Использование QtConcurrent"},
+    {CheckType::DirectConnectionUsage, "Использование Qt::DirectConnection (или Qt::ConnectionType::DirectConnection)"},
+    {CheckType::ThreadDependObjectPublicMethods, "Публичный метод у наследника ThreadDependObject"}
 };
 #endif // CHECKDEFINES_H

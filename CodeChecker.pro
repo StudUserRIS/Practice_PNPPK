@@ -26,6 +26,12 @@ SOURCES += \
     Checks/ConcreteCheckers/publicstatechecker.cpp \
     Checks/ConcreteCheckers/signalsslotswithpointerparameterschecker.cpp \
     Checks/ConcreteCheckers/primitivevariablenamechecker.cpp \
+    Checks/ConcreteCheckers/uninitializedpointerchecker.cpp \
+    Checks/ConcreteCheckers/uselessnullptrdeletechecker.cpp \
+    Checks/ConcreteCheckers/qwaitconditionusagechecker.cpp \
+    Checks/ConcreteCheckers/qtconcurrentusagechecker.cpp \
+    Checks/ConcreteCheckers/directconnectionusagechecker.cpp \
+    Checks/ConcreteCheckers/threaddependobjectpublicmethodschecker.cpp \
     Checks/checkfactory.cpp \
     Checks/checkhelper.cpp \
     Checks/checksfacade.cpp \
@@ -53,6 +59,12 @@ HEADERS += \
     Checks/ConcreteCheckers/publicstatechecker.h \
     Checks/ConcreteCheckers/signalsslotswithpointerparameterschecker.h \
     Checks/ConcreteCheckers/primitivevariablenamechecker.h \
+    Checks/ConcreteCheckers/uninitializedpointerchecker.h \
+    Checks/ConcreteCheckers/uselessnullptrdeletechecker.h \
+    Checks/ConcreteCheckers/qwaitconditionusagechecker.h \
+    Checks/ConcreteCheckers/qtconcurrentusagechecker.h \
+    Checks/ConcreteCheckers/directconnectionusagechecker.h \
+    Checks/ConcreteCheckers/threaddependobjectpublicmethodschecker.h \
     Checks/checkdefines.h \
     Checks/checkfactory.h \
     Checks/checkhelper.h \

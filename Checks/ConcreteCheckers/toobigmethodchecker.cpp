@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include <Checks/checkhelper.h>
+#include <QRegularExpression>
 
 constexpr int kMethodMaxLineCount = 100;
 
@@ -180,48 +181,22 @@ bool TooBigMethodChecker::checkSpesialSpace(char current, char next, char befor,
 
 QString TooBigMethodChecker::findName(QByteArray byteArray)
 {
-    QString methodName = "name not found__";
-    QByteArray nameByteArray = {};
-    bool flag = false; // Флаг, разрешающий взятие имени
-
-    int level = -1; // Счётчик обычных скобок
-
-    for (int i = byteArray.size() - 1; i >= 0; i--)
+    QString str = QString::fromUtf8(byteArray);
+    // Ищем паттерн имени метода перед скобкой. Захватываем опционально класс::метод
+    QRegularExpression regex(R"((?:[\w\*&<>:]+\s+)?(\w+(?:::\w+)?)\s*\()");
+    QRegularExpressionMatch match = regex.match(str);
+    
+    if (match.hasMatch()) 
     {
-        char currentByte = byteArray.at(i);
-
-        if (isspace(currentByte))
-            continue; // Пропускаем пробелы и переносы строк
-
-        if (currentByte == ')')
+        QString name = match.captured(1);
+        // Отсекаем стандартные конструкции языка
+        if (name == "if" || name == "while" || name == "for" || name == "switch" || name == "catch") 
         {
-            if (level == -1)
-                level++;
-            level++;
+            return "not method";
         }
-        else if (currentByte == '(')
-        {
-            level--;
-            if (level == 0)
-            {
-                flag = true;
-                continue;
-            }
-        }
-
-        // Проверяем истинность нахождения имени
-        if (level == 0 && flag)
-        {
-
-            methodName = checkingNameForTrue(i, byteArray, flag);
-            return methodName;
-        }
+        return name;
     }
-
-    if (level == -1)
-        return "not method";
-
-    return methodName;
+    return "not method";
 }
 
 QString TooBigMethodChecker::checkingNameForTrue(int& i, QByteArray byteArray, bool& flag)

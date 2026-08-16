@@ -15,6 +15,12 @@
 #include "Checks/ConcreteCheckers/toobigmethodchecker.h"
 #include "Checks/ConcreteCheckers/wrongsignalsnameschecker.h"
 #include "Checks/ConcreteCheckers/wrongslotnamechecker.h"
+#include "Checks/ConcreteCheckers/uninitializedpointerchecker.h"
+#include "Checks/ConcreteCheckers/uselessnullptrdeletechecker.h"
+#include "Checks/ConcreteCheckers/qwaitconditionusagechecker.h"
+#include "Checks/ConcreteCheckers/qtconcurrentusagechecker.h"
+#include "Checks/ConcreteCheckers/directconnectionusagechecker.h"
+#include "Checks/ConcreteCheckers/threaddependobjectpublicmethodschecker.h"
 
 CheckFactory::CheckFactory() {}
 
@@ -57,6 +63,18 @@ ICheck* CheckFactory::createChecker(CheckType type)
         case CheckType::UserTypeWrongNaming:
         case CheckType::MemcpyPotentionalError:
             return nullptr;
+        case CheckType::UninitializedPointer:
+            return new UninitializedPointerChecker();
+        case CheckType::UselessNullptrDelete:
+            return new UselessNullptrDeleteChecker();
+        case CheckType::QWaitConditionUsage:
+            return new QWaitConditionUsageChecker();
+        case CheckType::QtConcurrentUsage:
+            return new QtConcurrentUsageChecker();
+        case CheckType::DirectConnectionUsage:
+            return new DirectConnectionUsageChecker();
+        case CheckType::ThreadDependObjectPublicMethods:
+            return new ThreadDependObjectPublicMethodsChecker();
     }
     return nullptr;
 }

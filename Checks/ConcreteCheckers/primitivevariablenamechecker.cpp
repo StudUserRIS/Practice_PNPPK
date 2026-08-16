@@ -22,12 +22,18 @@ QList<CheckResult> PrimitiveVariableNameChecker::check(QString fileName)
 void PrimitiveVariableNameChecker::checkLocalVariables(const QByteArray& sourceCode, const QString& fileName,
                                                        QList<CheckResult>& results)
 {
-    QRegularExpression varRegex("\\b(int|double|float|bool|char|QString|QByteArray|auto)\\s+(\\w+)\\s*[;=]");
+    QRegularExpression varRegex("\\b([A-Za-z_][A-Za-z0-9_:]*(?:\\s*<[^>]*>)?)\\s+(?:\\*\\s*|&\\s*)?([A-Za-z_][A-Za-z0-9_]*)\\s*[;=]");
     QRegularExpressionMatchIterator matches = varRegex.globalMatch(sourceCode);
     while (matches.hasNext())
     {
         QRegularExpressionMatch match = matches.next();
         QString varName = match.captured(2);
+
+        // Исключения для стандартных переменных и счетчиков
+        if (varName == "ui" || varName == "i" || varName == "j" || varName == "k")
+        {
+            continue;
+        }
 
         if (varName.length() < 4)
         {
@@ -81,6 +87,12 @@ void PrimitiveVariableNameChecker::checkClassFields(const QByteArray& sourceCode
             QRegularExpressionMatch match = matches.next();
             QString typePart = match.captured(1);
             QString varName = match.captured(2);
+
+            // Исключение для переменной ui (игнорируем все проверки префиксов и длины)
+            if (varName == "ui")
+            {
+                continue;
+            }
 
             if (varName.length() < 6)
             {

@@ -10,8 +10,6 @@ QList<CheckResult> IncludesInCenterOfFileChecker::check(QString fileName)
     QList<CheckResult> results = {};
     bool flag = true;
     int currentLine = 1;
-    int foundPos = -1;
-    int posInAllFile = 0;
     QByteArray fragmentCode;
 
     for (int i = 0; i < sourceCode.size(); i++)
@@ -27,8 +25,6 @@ QList<CheckResult> IncludesInCenterOfFileChecker::check(QString fileName)
             if (!isspace(next) && next != '#' && flag)
             {
                 flag = false;
-                foundPos = i;
-                posInAllFile = i;
             }
         }
 
